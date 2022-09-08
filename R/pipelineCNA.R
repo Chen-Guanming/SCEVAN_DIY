@@ -42,17 +42,13 @@ pipelineCNA <- function(count_mtx, sample="", par_cores = 20, norm_cell = NULL, 
   
   res_proc <- preprocessingMtx(count_mtx,sample, par_cores=par_cores, findConfident = normalNotKnown, AdditionalGeneSets = AdditionalGeneSets, SCEVANsignatures = SCEVANsignatures, organism = organism)
   
-  return(res_proc)
-  
-  
-}
-
-other=function (if(normalNotKnown) norm_cell <- names(res_proc$norm_cell)
+ if(normalNotKnown) norm_cell <- names(res_proc$norm_cell)
 
   res_class <- classifyTumorCells(res_proc$count_mtx_norm, res_proc$count_mtx_annot, sample, par_cores=par_cores, ground_truth = NULL,  norm_cell_names = norm_cell, SEGMENTATION_CLASS = TRUE, SMOOTH = TRUE, beta_vega = beta_vega)
   
   print(paste("found", length(res_class$tum_cells), "tumor cells"))
   classDf <- data.frame(class = rep("filtered", length(colnames(count_mtx))), row.names = colnames(count_mtx))
+  classDf$class <- as.character(classDf$class)
   classDf[colnames(res_class$CNAmat)[-(1:3)], "class"] <- "normal"
   classDf[res_class$tum_cells, "class"] <- "tumor"
   classDf[res_class$confidentNormal, "confidentNormal"] <- "yes"
@@ -90,7 +86,12 @@ other=function (if(normalNotKnown) norm_cell <- names(res_proc$norm_cell)
   mtx_vega_files <- list.files(path = "./output/", pattern = "_mtx_vega")
   sapply(mtx_vega_files, function(x) file.remove(paste0("./output/",x)))
   
-  return(classDf))
+  return(classDf)
+  
+  
+}
+
+
 
 getClonalCNProfile <- function(res_class, res_proc, sample, par_cores, beta_vega = 3, organism = "human"){
   
