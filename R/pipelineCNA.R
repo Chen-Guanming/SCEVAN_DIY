@@ -48,6 +48,7 @@ pipelineCNA <- function(count_mtx, sample="", par_cores = 20, norm_cell = NULL, 
   
   print(paste("found", length(res_class$tum_cells), "tumor cells"))
   classDf <- data.frame(class = rep("filtered", length(colnames(count_mtx))), row.names = colnames(count_mtx))
+  classDf$class <- as.character(classDf$class)
   classDf[colnames(res_class$CNAmat)[-(1:3)], "class"] <- "normal"
   classDf[res_class$tum_cells, "class"] <- "tumor"
   classDf[res_class$confidentNormal, "confidentNormal"] <- "yes"
