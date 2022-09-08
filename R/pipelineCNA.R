@@ -42,7 +42,12 @@ pipelineCNA <- function(count_mtx, sample="", par_cores = 20, norm_cell = NULL, 
   
   res_proc <- preprocessingMtx(count_mtx,sample, par_cores=par_cores, findConfident = normalNotKnown, AdditionalGeneSets = AdditionalGeneSets, SCEVANsignatures = SCEVANsignatures, organism = organism)
   
-  if(normalNotKnown) norm_cell <- names(res_proc$norm_cell)
+  return(res_proc)
+  
+  
+}
+
+other=function (if(normalNotKnown) norm_cell <- names(res_proc$norm_cell)
 
   res_class <- classifyTumorCells(res_proc$count_mtx_norm, res_proc$count_mtx_annot, sample, par_cores=par_cores, ground_truth = NULL,  norm_cell_names = norm_cell, SEGMENTATION_CLASS = TRUE, SMOOTH = TRUE, beta_vega = beta_vega)
   
@@ -85,9 +90,7 @@ pipelineCNA <- function(count_mtx, sample="", par_cores = 20, norm_cell = NULL, 
   mtx_vega_files <- list.files(path = "./output/", pattern = "_mtx_vega")
   sapply(mtx_vega_files, function(x) file.remove(paste0("./output/",x)))
   
-  return(classDf)
-}
-
+  return(classDf))
 
 getClonalCNProfile <- function(res_class, res_proc, sample, par_cores, beta_vega = 3, organism = "human"){
   
